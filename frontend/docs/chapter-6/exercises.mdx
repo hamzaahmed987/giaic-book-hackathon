@@ -1,0 +1,153 @@
+---
+sidebar_position: 4
+title: "Exercises"
+description: Build your own AI application
+---
+
+import Details from '@theme/Details';
+
+# Exercises
+
+## Exercise 1: Implement Rate Limiting
+
+Add rate limiting to protect your API.
+
+<Details summary="Solution">
+
+```python
+from fastapi import Request, HTTPException
+from collections import defaultdict
+import time
+
+class RateLimiter:
+    def __init__(self, requests_per_minute: int = 60):
+        self.rpm = requests_per_minute
+        self.requests = defaultdict(list)
+
+    async def __call__(self, request: Request):
+        client_ip = request.client.host
+        now = time.time()
+
+        # Clean old requests
+        self.requests[client_ip] = [
+            t for t in self.requests[client_ip]
+            if now - t < 60
+        ]
+
+        if len(self.requests[client_ip]) >= self.rpm:
+            raise HTTPException(429, "Rate limit exceeded")
+
+        self.requests[client_ip].append(now)
+
+# Usage
+rate_limiter = RateLimiter(requests_per_minute=30)
+
+@router.post("/chat")
+async def chat(request: ChatRequest, _: None = Depends(rate_limiter)):
+    ...
+```
+
+</Details>
+
+## Exercise 2: Add Error Handling
+
+Implement comprehensive error handling for the chat endpoint.
+
+<Details summary="Solution">
+
+```python
+from fastapi import HTTPException
+from openai import APIError, RateLimitError
+import logging
+
+logger = logging.getLogger(__name__)
+
+@router.post("/chat")
+async def chat(request: ChatRequest):
+    try:
+        result = await rag_service.query(request.query)
+        return ChatResponse(answer=result.answer, citations=result.citations)
+
+    except RateLimitError:
+        logger.warning("OpenAI rate limit hit")
+        raise HTTPException(503, "AI service temporarily unavailable. Please retry.")
+
+    except APIError as e:
+        logger.error(f"OpenAI API error: {e}")
+        raise HTTPException(502, "AI service error")
+
+    except Exception as e:
+        logger.exception("Unexpected error in chat endpoint")
+        raise HTTPException(500, "Internal server error")
+```
+
+</Details>
+
+## Exercise 3: Build the Frontend Chat Component
+
+Create a React component for the embedded chatbot.
+
+<Details summary="Solution">
+
+```tsx
+// frontend/src/components/Chatbot/Chatbot.tsx
+import React, { useState } from 'react';
+
+export function Chatbot() {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+
+    const userMessage = { role: 'user', content: input };
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/chat/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: input })
+      });
+
+      const data = await response.json();
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: data.answer,
+        citations: data.citations
+      }]);
+    } catch (error) {
+      console.error('Chat error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="chatbot">
+      <div className="messages">
+        {messages.map((msg, i) => (
+          <div key={i} className={`message ${msg.role}`}>
+            {msg.content}
+          </div>
+        ))}
+      </div>
+      <input
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        onKeyPress={e => e.key === 'Enter' && sendMessage()}
+        placeholder="Ask a question..."
+      />
+    </div>
+  );
+}
+```
+
+</Details>
+
+---
+
+Review the [Summary](/book/chapter-6/summary).

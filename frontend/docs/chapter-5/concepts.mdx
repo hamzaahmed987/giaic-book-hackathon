@@ -1,0 +1,153 @@
+---
+sidebar_position: 2
+title: "Core Concepts"
+description: Understanding AI agent architecture
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Core Concepts of AI Agents
+
+## The Agent Loop
+
+```python
+def agent_loop(task: str, tools: list, max_iterations: int = 10):
+    messages = [{"role": "user", "content": task}]
+
+    for i in range(max_iterations):
+        # Think: LLM decides what to do
+        response = llm.chat(messages, tools=tools)
+
+        # Check if done
+        if response.finish_reason == "stop":
+            return response.content
+
+        # Act: Execute tool calls
+        for tool_call in response.tool_calls:
+            result = execute_tool(tool_call)
+            messages.append({"role": "tool", "content": result})
+
+        # Observe: Results added to context for next iteration
+
+    return "Max iterations reached"
+```
+
+## Function Calling
+
+LLMs can call functions/tools you define:
+
+<Tabs>
+  <TabItem value="define" label="Define Tools" default>
+
+```python
+tools = [
+    {
+        "type": "function",
+        "function": {
+            "name": "search_web",
+            "description": "Search the web for information",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Search query"}
+                },
+                "required": ["query"]
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
+            "name": "calculate",
+            "description": "Perform mathematical calculations",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "expression": {"type": "string", "description": "Math expression"}
+                },
+                "required": ["expression"]
+            }
+        }
+    }
+]
+```
+
+  </TabItem>
+  <TabItem value="execute" label="Execute Tools">
+
+```python
+def execute_tool(tool_call):
+    name = tool_call.function.name
+    args = json.loads(tool_call.function.arguments)
+
+    if name == "search_web":
+        return search_web(args["query"])
+    elif name == "calculate":
+        return str(eval(args["expression"]))  # Use safely in production!
+    else:
+        return f"Unknown tool: {name}"
+```
+
+  </TabItem>
+</Tabs>
+
+## OpenAI Agents SDK
+
+```python
+from openai import OpenAI
+from openai.types.beta import AssistantTool
+
+client = OpenAI()
+
+# Create an assistant with tools
+assistant = client.beta.assistants.create(
+    name="Research Assistant",
+    instructions="You help with research tasks.",
+    model="gpt-4-turbo",
+    tools=[
+        {"type": "code_interpreter"},
+        {"type": "file_search"}
+    ]
+)
+
+# Create a thread (conversation)
+thread = client.beta.threads.create()
+
+# Add a message
+client.beta.threads.messages.create(
+    thread_id=thread.id,
+    role="user",
+    content="Analyze the trends in AI investment"
+)
+
+# Run the assistant
+run = client.beta.threads.runs.create_and_poll(
+    thread_id=thread.id,
+    assistant_id=assistant.id
+)
+
+# Get the response
+messages = client.beta.threads.messages.list(thread_id=thread.id)
+print(messages.data[0].content[0].text.value)
+```
+
+## Agent Patterns
+
+| Pattern | Description | Use Case |
+|---------|-------------|----------|
+| **ReAct** | Reasoning + Acting | General tasks |
+| **Plan & Execute** | Plan first, then execute | Complex multi-step |
+| **Reflexion** | Self-critique and improve | Quality-focused |
+| **Multi-Agent** | Multiple specialized agents | Large systems |
+
+## Tool Design Best Practices
+
+1. **Clear descriptions** - LLM uses these to decide when to use tools
+2. **Specific parameters** - Well-defined inputs reduce errors
+3. **Error handling** - Return helpful error messages
+4. **Idempotency** - Tools should be safe to retry
+
+---
+
+Continue to [Examples](/book/chapter-5/examples).

@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(git branch:*)",
+      "Bash(npx create-docusaurus@latest . classic --typescript)",
+      "Bash(npx create-docusaurus:*)",
+      "Bash(dir:*)",
+      "Bash(npm start)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(taskkill:*)",
+      "Bash(timeout /t 10 /nobreak)",
+      "Bash(notepad \"C:\\\\Users\\\\Hamza\\\\OneDrive\\\\Desktop\\\\giaic-hackathon\\\\.env\")",
+      "Bash(pip install:*)",
+      "Bash(ping:*)",
+      "Bash(copy \".env\" \"backend\\\\.env\")",
+      "Bash(python -m uvicorn:*)",
+      "Bash(curl:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(tasklist /FI \"IMAGENAME eq python.exe\" /FO CSV)",
+      "Bash(find:*)",
+      "Bash(python:*)",
+      "Bash(powershell -Command:*)",
+      "WebSearch"
+    ]
+  }
+}

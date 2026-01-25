@@ -1,0 +1,92 @@
+---
+sidebar_position: 3
+title: "Practical Examples"
+description: Real-world prompt engineering examples
+---
+
+# Practical Examples
+
+## Example 1: Code Review Prompt
+
+```python
+SYSTEM_PROMPT = """You are an expert code reviewer. Analyze code for:
+1. Bugs and potential errors
+2. Security vulnerabilities
+3. Performance issues
+4. Code style and best practices
+
+Format your response as:
+## Summary
+[Brief overview]
+
+## Issues Found
+- [Issue 1]: [Description] - Severity: [High/Medium/Low]
+
+## Suggestions
+- [Improvement suggestions]
+"""
+
+def review_code(code: str) -> str:
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": f"Review this code:\n```python\n{code}\n```"}
+        ]
+    )
+    return response.choices[0].message.content
+```
+
+## Example 2: Data Extraction
+
+```python
+EXTRACTION_PROMPT = """Extract structured data from the text.
+
+Return JSON with this exact structure:
+{
+  "name": "string or null",
+  "email": "string or null",
+  "phone": "string or null",
+  "company": "string or null"
+}
+
+Text: {text}
+"""
+
+# Usage
+text = "Hi, I'm John Smith from TechCorp. Reach me at john@techcorp.com or 555-1234"
+prompt = EXTRACTION_PROMPT.format(text=text)
+```
+
+## Example 3: Iterative Refinement
+
+```python
+def iterative_writing(topic: str, iterations: int = 3) -> str:
+    """Improve writing through multiple passes."""
+
+    # Initial draft
+    messages = [
+        {"role": "user", "content": f"Write a paragraph about {topic}"}
+    ]
+    response = get_completion(messages)
+    current_draft = response
+
+    # Refinement iterations
+    refinement_prompts = [
+        "Make this more concise while keeping key points",
+        "Add specific examples or data to support claims",
+        "Improve the flow and transitions between sentences"
+    ]
+
+    for prompt in refinement_prompts[:iterations]:
+        messages = [
+            {"role": "user", "content": f"Original text:\n{current_draft}\n\nInstruction: {prompt}"}
+        ]
+        current_draft = get_completion(messages)
+
+    return current_draft
+```
+
+---
+
+Continue to [Exercises](/book/chapter-3/exercises).

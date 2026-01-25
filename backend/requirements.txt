@@ -1,0 +1,46 @@
+# FastAPI and server
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+python-multipart>=0.0.6
+
+# Database
+sqlalchemy>=2.0.0
+asyncpg>=0.29.0
+alembic>=1.13.0
+
+# Vector Database
+qdrant-client>=1.7.0
+
+# OpenAI (for OpenRouter compatibility)
+openai>=1.12.0
+
+# OpenAI Agents SDK (for agent framework)
+openai-agents>=0.2.0
+
+# Cohere (for embeddings)
+cohere>=5.0.0
+
+# Authentication
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# Validation and serialization
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+email-validator>=2.1.0
+
+# HTTP client
+httpx>=0.26.0
+
+# Caching
+redis>=5.0.0
+
+# Utilities
+python-dotenv>=1.0.0
+tenacity>=8.2.0
+
+# Development
+pytest>=7.4.0
+pytest-asyncio>=0.23.0
+black>=24.1.0
+ruff>=0.1.0

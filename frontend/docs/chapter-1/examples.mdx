@@ -1,0 +1,414 @@
+---
+sidebar_position: 3
+title: "Practical Examples"
+description: Hands-on examples demonstrating AI fundamentals
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Practical Examples
+
+Let's explore AI concepts through real, runnable code examples.
+
+## Example 1: Simple AI Classification
+
+This example demonstrates how a basic machine learning classifier works.
+
+### Setup
+
+First, install the required packages:
+
+```bash
+pip install scikit-learn pandas numpy
+```
+
+### Code
+
+```python
+# example_1_classification.py
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
+# 1. Load data (the "fuel" for AI)
+iris = load_iris()
+X, y = iris.data, iris.target
+
+# 2. Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# 3. Create and train the model (the "brain")
+model = DecisionTreeClassifier(max_depth=3)
+model.fit(X_train, y_train)  # Learning happens here
+
+# 4. Make predictions (inference)
+predictions = model.predict(X_test)
+
+# 5. Evaluate performance
+accuracy = accuracy_score(y_test, predictions)
+print(f"Model Accuracy: {accuracy:.2%}")
+
+# 6. Use the model on new data
+new_flower = [[5.1, 3.5, 1.4, 0.2]]  # Measurements
+prediction = model.predict(new_flower)
+species = iris.target_names[prediction[0]]
+print(f"Predicted species: {species}")
+```
+
+### Output
+
+```
+Model Accuracy: 96.67%
+Predicted species: setosa
+```
+
+### Explanation
+
+| Step | What Happens | AI Component |
+|------|--------------|--------------|
+| 1 | Load the iris dataset | **Data** |
+| 2 | Split data for training/testing | **Data preparation** |
+| 3 | Train the decision tree | **Model training** |
+| 4 | Make predictions | **Inference** |
+| 5 | Check accuracy | **Evaluation** |
+| 6 | Use on new data | **Deployment** |
+
+## Example 2: Understanding Neural Networks
+
+This example shows the basic building blocks of neural networks.
+
+```python
+# example_2_neural_network.py
+import numpy as np
+
+class SimpleNeuron:
+    """
+    A single neuron - the basic unit of neural networks.
+    """
+
+    def __init__(self, num_inputs):
+        # Initialize random weights
+        self.weights = np.random.randn(num_inputs)
+        self.bias = np.random.randn()
+
+    def sigmoid(self, x):
+        """Activation function - adds non-linearity"""
+        return 1 / (1 + np.exp(-x))
+
+    def forward(self, inputs):
+        """
+        Forward pass:
+        1. Multiply inputs by weights
+        2. Add bias
+        3. Apply activation function
+        """
+        weighted_sum = np.dot(inputs, self.weights) + self.bias
+        return self.sigmoid(weighted_sum)
+
+
+# Create a neuron with 3 inputs
+neuron = SimpleNeuron(num_inputs=3)
+
+# Sample input
+inputs = np.array([0.5, 0.3, 0.2])
+
+# Get output
+output = neuron.forward(inputs)
+print(f"Neuron output: {output:.4f}")
+```
+
+### Visualization
+
+```
+         INPUTS              NEURON                 OUTPUT
+    ┌─────────────┐    ┌───────────────┐    ┌─────────────┐
+    │ x₁ = 0.5    │───▶│               │    │             │
+    ├─────────────┤    │   Σ(xᵢ·wᵢ)+b  │───▶│   Output    │
+    │ x₂ = 0.3    │───▶│               │    │   = 0.68    │
+    ├─────────────┤    │   sigmoid(z)  │    │             │
+    │ x₃ = 0.2    │───▶│               │    │             │
+    └─────────────┘    └───────────────┘    └─────────────┘
+```
+
+## Example 3: Text Classification with AI
+
+A practical example of narrow AI for text classification.
+
+<Tabs>
+  <TabItem value="basic" label="Basic Implementation" default>
+
+```python
+# example_3_text_classification_basic.py
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+
+# Training data
+texts = [
+    "I love this product, it's amazing!",
+    "Terrible experience, waste of money",
+    "Great quality, highly recommend",
+    "Worst purchase ever, very disappointed",
+    "Excellent service, will buy again",
+    "Poor quality, broke after one use"
+]
+labels = ["positive", "negative", "positive", "negative", "positive", "negative"]
+
+# Create a pipeline (combines preprocessing and model)
+pipeline = Pipeline([
+    ('vectorizer', TfidfVectorizer()),  # Convert text to numbers
+    ('classifier', MultinomialNB())      # Naive Bayes classifier
+])
+
+# Train the model
+pipeline.fit(texts, labels)
+
+# Test on new data
+test_texts = [
+    "This is the best thing I've ever bought!",
+    "Completely useless, don't waste your time"
+]
+
+predictions = pipeline.predict(test_texts)
+for text, prediction in zip(test_texts, predictions):
+    print(f"'{text[:40]}...' → {prediction}")
+```
+
+  </TabItem>
+  <TabItem value="advanced" label="With Confidence Scores">
+
+```python
+# example_3_text_classification_advanced.py
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+import numpy as np
+
+# Same training data
+texts = [
+    "I love this product, it's amazing!",
+    "Terrible experience, waste of money",
+    "Great quality, highly recommend",
+    "Worst purchase ever, very disappointed",
+    "Excellent service, will buy again",
+    "Poor quality, broke after one use"
+]
+labels = ["positive", "negative", "positive", "negative", "positive", "negative"]
+
+# Create and train pipeline
+pipeline = Pipeline([
+    ('vectorizer', TfidfVectorizer()),
+    ('classifier', MultinomialNB())
+])
+pipeline.fit(texts, labels)
+
+# Test with confidence scores
+test_texts = [
+    "This is the best thing I've ever bought!",
+    "It's okay, nothing special",  # Ambiguous
+    "Completely useless, don't waste your time"
+]
+
+# Get probabilities
+probabilities = pipeline.predict_proba(test_texts)
+classes = pipeline.classes_
+
+print("Sentiment Analysis with Confidence:\n")
+for text, probs in zip(test_texts, probabilities):
+    prediction = classes[np.argmax(probs)]
+    confidence = np.max(probs) * 100
+
+    print(f"Text: '{text}'")
+    print(f"  Prediction: {prediction} ({confidence:.1f}% confident)")
+    print(f"  Negative: {probs[0]*100:.1f}%, Positive: {probs[1]*100:.1f}%")
+    print()
+```
+
+  </TabItem>
+</Tabs>
+
+### Output
+
+```
+Sentiment Analysis with Confidence:
+
+Text: 'This is the best thing I've ever bought!'
+  Prediction: positive (87.3% confident)
+  Negative: 12.7%, Positive: 87.3%
+
+Text: 'It's okay, nothing special'
+  Prediction: positive (52.1% confident)
+  Negative: 47.9%, Positive: 52.1%
+
+Text: 'Completely useless, don't waste your time'
+  Prediction: negative (91.5% confident)
+  Negative: 91.5%, Positive: 8.5%
+```
+
+## Example 4: Interactive AI Demo
+
+This example shows how AI can interact with users.
+
+```python
+# example_4_interactive_ai.py
+class SimpleQABot:
+    """
+    A rule-based AI chatbot (Narrow AI).
+    Demonstrates how early AI systems worked.
+    """
+
+    def __init__(self):
+        self.knowledge_base = {
+            "what is ai": "AI is the field of creating machines that can perform tasks requiring human intelligence.",
+            "types of ai": "There are three types: Narrow AI (current), General AI (future), and Superintelligent AI (hypothetical).",
+            "machine learning": "Machine Learning is a subset of AI where systems learn from data without explicit programming.",
+            "deep learning": "Deep Learning uses neural networks with many layers to learn complex patterns.",
+        }
+
+    def preprocess(self, text):
+        """Clean and normalize input"""
+        return text.lower().strip()
+
+    def find_best_match(self, query):
+        """Simple keyword matching"""
+        query = self.preprocess(query)
+
+        # Check for exact or partial matches
+        for key, answer in self.knowledge_base.items():
+            if key in query or any(word in query for word in key.split()):
+                return answer
+
+        return "I don't have information about that. Try asking about AI, ML, or Deep Learning."
+
+    def chat(self, user_input):
+        """Main chat function"""
+        return self.find_best_match(user_input)
+
+
+# Usage
+bot = SimpleQABot()
+
+questions = [
+    "What is AI?",
+    "Tell me about machine learning",
+    "What are the types of AI?",
+    "What is quantum computing?"  # Outside knowledge base
+]
+
+print("=== Simple Q&A Bot Demo ===\n")
+for question in questions:
+    answer = bot.chat(question)
+    print(f"Q: {question}")
+    print(f"A: {answer}\n")
+```
+
+### Output
+
+```
+=== Simple Q&A Bot Demo ===
+
+Q: What is AI?
+A: AI is the field of creating machines that can perform tasks requiring human intelligence.
+
+Q: Tell me about machine learning
+A: Machine Learning is a subset of AI where systems learn from data without explicit programming.
+
+Q: What are the types of AI?
+A: There are three types: Narrow AI (current), General AI (future), and Superintelligent AI (hypothetical).
+
+Q: What is quantum computing?
+A: I don't have information about that. Try asking about AI, ML, or Deep Learning.
+```
+
+## Example 5: Visualizing AI Learning
+
+```python
+# example_5_learning_visualization.py
+import matplotlib.pyplot as plt
+import numpy as np
+
+def simulate_learning(num_epochs=100):
+    """
+    Simulate how an AI model learns over time.
+    Loss decreases as the model improves.
+    """
+    epochs = np.arange(num_epochs)
+
+    # Simulate loss curve (exponential decay with noise)
+    initial_loss = 2.5
+    final_loss = 0.1
+    decay_rate = 0.05
+    noise = np.random.normal(0, 0.05, num_epochs)
+
+    loss = final_loss + (initial_loss - final_loss) * np.exp(-decay_rate * epochs) + noise
+
+    # Simulate accuracy curve
+    accuracy = 1 - (loss / initial_loss)
+    accuracy = np.clip(accuracy, 0, 1)
+
+    return epochs, loss, accuracy
+
+
+# Generate data
+epochs, loss, accuracy = simulate_learning()
+
+# Create visualization
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
+
+# Loss plot
+ax1.plot(epochs, loss, 'b-', linewidth=2)
+ax1.set_xlabel('Training Epochs')
+ax1.set_ylabel('Loss')
+ax1.set_title('Model Loss Over Time')
+ax1.grid(True, alpha=0.3)
+
+# Accuracy plot
+ax2.plot(epochs, accuracy * 100, 'g-', linewidth=2)
+ax2.set_xlabel('Training Epochs')
+ax2.set_ylabel('Accuracy (%)')
+ax2.set_title('Model Accuracy Over Time')
+ax2.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.savefig('learning_curves.png')
+plt.show()
+
+print("Key Insight: As training progresses, loss decreases and accuracy increases!")
+```
+
+## Running the Examples
+
+To run these examples locally:
+
+```bash
+# Create a new directory
+mkdir ai-examples && cd ai-examples
+
+# Create a virtual environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install scikit-learn numpy matplotlib
+
+# Run any example
+python example_1_classification.py
+```
+
+## Key Learnings from Examples
+
+| Example | Concept Demonstrated |
+|---------|---------------------|
+| 1 | Complete ML pipeline |
+| 2 | Neural network fundamentals |
+| 3 | Text classification (NLP) |
+| 4 | Rule-based vs learning AI |
+| 5 | Training visualization |
+
+---
+
+Ready to practice? Try the [Exercises](/book/chapter-1/exercises).

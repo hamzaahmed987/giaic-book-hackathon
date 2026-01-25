@@ -1,0 +1,179 @@
+---
+sidebar_position: 2
+title: "Core Concepts"
+description: Architecture for AI applications
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Core Concepts of AI Application Architecture
+
+## Clean Architecture
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    PRESENTATION                         │
+│           (React Components, API Routes)                │
+├─────────────────────────────────────────────────────────┤
+│                    APPLICATION                          │
+│               (Use Cases, Services)                     │
+├─────────────────────────────────────────────────────────┤
+│                      DOMAIN                             │
+│              (Entities, Business Logic)                 │
+├─────────────────────────────────────────────────────────┤
+│                   INFRASTRUCTURE                        │
+│        (Database, External APIs, Vector DB)             │
+└─────────────────────────────────────────────────────────┘
+```
+
+## Key Components
+
+### 1. API Layer (FastAPI)
+
+```python
+# app/api/chat.py
+from fastapi import APIRouter, Depends
+from app.services.chat_service import ChatService
+
+router = APIRouter()
+
+@router.post("/chat")
+async def chat(
+    request: ChatRequest,
+    chat_service: ChatService = Depends()
+):
+    response = await chat_service.process_query(
+        query=request.query,
+        user_id=request.user_id,
+        selected_text=request.selected_text
+    )
+    return ChatResponse(
+        answer=response.answer,
+        citations=response.citations
+    )
+```
+
+### 2. Service Layer
+
+```python
+# app/services/chat_service.py
+class ChatService:
+    def __init__(
+        self,
+        rag_service: RAGService,
+        user_service: UserService
+    ):
+        self.rag = rag_service
+        self.users = user_service
+
+    async def process_query(
+        self,
+        query: str,
+        user_id: str,
+        selected_text: str = None
+    ) -> ChatResponse:
+        # Get user profile for personalization
+        user = await self.users.get_profile(user_id)
+
+        # Build context-aware query
+        context_query = self._build_query(query, selected_text)
+
+        # Get RAG response
+        response = await self.rag.query(
+            query=context_query,
+            user_level=user.experience_level
+        )
+
+        return response
+```
+
+### 3. Infrastructure Layer
+
+<Tabs>
+  <TabItem value="database" label="Database" default>
+
+```python
+# app/infrastructure/database.py
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.orm import sessionmaker
+
+DATABASE_URL = "postgresql+asyncpg://user:pass@neon.tech/db"
+
+engine = create_async_engine(DATABASE_URL)
+async_session = sessionmaker(engine, class_=AsyncSession)
+
+async def get_db():
+    async with async_session() as session:
+        yield session
+```
+
+  </TabItem>
+  <TabItem value="vector" label="Vector DB">
+
+```python
+# app/infrastructure/vector_store.py
+from qdrant_client import AsyncQdrantClient
+
+class VectorStore:
+    def __init__(self, url: str, api_key: str):
+        self.client = AsyncQdrantClient(url=url, api_key=api_key)
+
+    async def search(self, embedding: list, limit: int = 5):
+        results = await self.client.search(
+            collection_name="book_content",
+            query_vector=embedding,
+            limit=limit
+        )
+        return results
+```
+
+  </TabItem>
+</Tabs>
+
+## Authentication with Better-Auth
+
+```typescript
+// frontend/src/lib/auth.ts
+import { createAuthClient } from "better-auth/client";
+
+export const authClient = createAuthClient({
+  baseURL: process.env.NEXT_PUBLIC_API_URL
+});
+
+// Usage in components
+const { signIn, signUp, signOut, session } = authClient;
+```
+
+## User Profiling
+
+```python
+# app/models/user.py
+from sqlalchemy import Column, String, Enum, JSON
+
+class UserProfile(Base):
+    __tablename__ = "user_profiles"
+
+    id = Column(String, primary_key=True)
+    email = Column(String, unique=True)
+    experience_level = Column(Enum("beginner", "intermediate", "advanced"))
+    known_languages = Column(JSON)  # ["Python", "JavaScript"]
+    hardware_tier = Column(Enum("low", "medium", "high"))
+    goals = Column(JSON)  # ["learning", "professional", "research"]
+```
+
+## Content Personalization Flow
+
+```
+User Request → Get Profile → Adjust Content → Cache → Return
+
+1. User clicks "Personalize"
+2. Fetch user profile
+3. Generate personalized version using LLM
+4. Cache for future requests
+5. Return personalized content
+```
+
+---
+
+Continue to [Examples](/book/chapter-6/examples).

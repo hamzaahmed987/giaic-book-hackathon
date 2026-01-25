@@ -1,0 +1,35 @@
+---
+sidebar_position: 5
+title: "Summary"
+description: Key takeaways from RAG Systems
+---
+
+# Chapter 4 Summary
+
+## RAG Pipeline
+
+```
+Documents → Chunk → Embed → Store in Vector DB
+Query → Embed → Search → Retrieve → Generate with Context
+```
+
+## Key Decisions
+
+| Decision | Options | Recommendation |
+|----------|---------|----------------|
+| Chunk Size | 200-1000 tokens | 500 for general use |
+| Overlap | 10-20% | 50-100 tokens |
+| Top-K | 3-10 | 5 is good default |
+| Embedding Model | OpenAI, Cohere | text-embedding-3-small |
+
+## Best Practices
+
+1. Include metadata for filtering and citations
+2. Use semantic chunking when possible
+3. Consider hybrid search for better recall
+4. Add reranking for precision
+5. Always validate with real queries
+
+---
+
+Next: [Chapter 5: AI Agents](/book/chapter-5/overview) - Build autonomous AI systems.

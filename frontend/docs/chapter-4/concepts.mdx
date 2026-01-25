@@ -1,0 +1,144 @@
+---
+sidebar_position: 2
+title: "Core Concepts"
+description: Understanding RAG architecture and components
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Core Concepts of RAG
+
+## What is RAG?
+
+**Retrieval-Augmented Generation (RAG)** enhances LLM responses by retrieving relevant documents before generating answers.
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    RAG ARCHITECTURE                     │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  INDEXING (Offline)                                    │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐             │
+│  │Documents│──▶│ Chunk   │──▶│ Embed   │──▶ Vector DB │
+│  └─────────┘   └─────────┘   └─────────┘             │
+│                                                         │
+│  RETRIEVAL (Online)                                    │
+│  ┌─────────┐   ┌─────────┐   ┌─────────┐             │
+│  │  Query  │──▶│ Embed   │──▶│ Search  │──▶ Top-K     │
+│  └─────────┘   └─────────┘   └─────────┘   Docs      │
+│                                                         │
+│  GENERATION                                            │
+│  ┌─────────────────────────────────────────────────┐  │
+│  │  LLM(Query + Retrieved Docs) → Response          │  │
+│  └─────────────────────────────────────────────────┘  │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+## Key Components
+
+### 1. Document Chunking
+
+Breaking documents into optimal pieces:
+
+<Tabs>
+  <TabItem value="fixed" label="Fixed Size" default>
+
+```python
+def fixed_chunk(text: str, chunk_size: int = 500, overlap: int = 50):
+    chunks = []
+    for i in range(0, len(text), chunk_size - overlap):
+        chunks.append(text[i:i + chunk_size])
+    return chunks
+```
+
+  </TabItem>
+  <TabItem value="semantic" label="Semantic">
+
+```python
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=500,
+    chunk_overlap=50,
+    separators=["\n\n", "\n", ". ", " "]
+)
+chunks = splitter.split_text(document)
+```
+
+  </TabItem>
+</Tabs>
+
+### 2. Embeddings
+
+Converting text to vectors:
+
+```python
+from openai import OpenAI
+
+client = OpenAI()
+
+def get_embedding(text: str) -> list[float]:
+    response = client.embeddings.create(
+        model="text-embedding-3-small",
+        input=text
+    )
+    return response.data[0].embedding
+```
+
+### 3. Vector Database (Qdrant)
+
+```python
+from qdrant_client import QdrantClient
+from qdrant_client.models import VectorParams, Distance
+
+# Connect
+client = QdrantClient(url="YOUR_QDRANT_URL", api_key="YOUR_API_KEY")
+
+# Create collection
+client.create_collection(
+    collection_name="book_chunks",
+    vectors_config=VectorParams(size=1536, distance=Distance.COSINE)
+)
+
+# Search
+results = client.search(
+    collection_name="book_chunks",
+    query_vector=query_embedding,
+    limit=5
+)
+```
+
+### 4. Retrieval + Generation
+
+```python
+def rag_query(question: str) -> str:
+    # 1. Embed the question
+    query_embedding = get_embedding(question)
+
+    # 2. Search for relevant chunks
+    results = vector_db.search(query_embedding, limit=5)
+    context = "\n".join([r.payload["text"] for r in results])
+
+    # 3. Generate response with context
+    response = llm.chat([
+        {"role": "system", "content": f"Answer based on this context:\n{context}"},
+        {"role": "user", "content": question}
+    ])
+
+    return response
+```
+
+## Chunking Strategies
+
+| Strategy | Pros | Cons |
+|----------|------|------|
+| Fixed Size | Simple, predictable | May cut mid-sentence |
+| Sentence | Natural boundaries | Variable sizes |
+| Semantic | Meaningful units | More complex |
+| Recursive | Respects structure | Needs tuning |
+
+---
+
+Continue to [Examples](/book/chapter-4/examples).

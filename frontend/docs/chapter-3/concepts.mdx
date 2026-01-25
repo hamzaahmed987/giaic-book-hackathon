@@ -1,0 +1,129 @@
+---
+sidebar_position: 2
+title: "Core Concepts"
+description: Prompt engineering principles and techniques
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Core Concepts of Prompt Engineering
+
+## What is Prompt Engineering?
+
+**Prompt Engineering** is the practice of designing inputs to AI models to get desired outputs. It's both an art and a science.
+
+## Key Principles
+
+### 1. Be Specific and Clear
+
+```
+❌ Bad: "Write something about AI"
+✅ Good: "Write a 200-word explanation of how neural networks learn, suitable for high school students"
+```
+
+### 2. Provide Context
+
+```
+✅ Good: "You are an expert Python developer reviewing code for security vulnerabilities. Analyze this code and identify any security issues..."
+```
+
+### 3. Use Examples (Few-Shot Learning)
+
+```
+Convert the following to formal English:
+
+Input: "gonna grab some coffee"
+Output: "I am going to get some coffee"
+
+Input: "wanna come with?"
+Output: "Would you like to accompany me?"
+
+Input: "that's so cool!"
+Output: [Model completes based on pattern]
+```
+
+## Advanced Techniques
+
+<Tabs>
+  <TabItem value="cot" label="Chain of Thought" default>
+
+**Chain of Thought (CoT)** prompts the model to show its reasoning:
+
+```
+Solve this step by step:
+What is 23 × 17?
+
+Step 1: Break down 17 into 10 + 7
+Step 2: Calculate 23 × 10 = 230
+Step 3: Calculate 23 × 7 = 161
+Step 4: Add: 230 + 161 = 391
+
+Answer: 391
+```
+
+  </TabItem>
+  <TabItem value="roles" label="Role Playing">
+
+Assign specific personas:
+
+```
+You are a senior software architect with 20 years of experience.
+Review this system design and provide feedback focusing on:
+- Scalability concerns
+- Potential bottlenecks
+- Security considerations
+```
+
+  </TabItem>
+  <TabItem value="format" label="Output Formatting">
+
+Specify exact output formats:
+
+```
+Analyze this text and return JSON with exactly this structure:
+{
+  "sentiment": "positive|negative|neutral",
+  "confidence": 0.0-1.0,
+  "key_topics": ["topic1", "topic2"]
+}
+```
+
+  </TabItem>
+</Tabs>
+
+## The CRAFT Framework
+
+| Letter | Meaning | Example |
+|--------|---------|---------|
+| **C** | Context | "You are a data scientist..." |
+| **R** | Role | "...helping a junior developer..." |
+| **A** | Action | "...review this code..." |
+| **F** | Format | "...provide feedback as bullet points..." |
+| **T** | Tone | "...in a constructive and encouraging manner." |
+
+## Common Patterns
+
+### System Prompt Pattern
+```
+SYSTEM: You are [role]. Your task is to [action].
+Always [constraint 1]. Never [constraint 2].
+Format responses as [format].
+
+USER: [specific request]
+```
+
+### Template Pattern
+```
+Given the following [input type]:
+---
+{input}
+---
+
+Perform [task] and return [output format].
+Consider [special instructions].
+```
+
+---
+
+Continue to [Examples](/book/chapter-3/examples).

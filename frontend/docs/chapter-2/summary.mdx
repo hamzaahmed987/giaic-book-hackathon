@@ -1,0 +1,38 @@
+---
+sidebar_position: 5
+title: "Summary"
+description: Key takeaways from LLM Fundamentals
+---
+
+# Chapter 2 Summary
+
+## Key Concepts
+
+| Concept | Description |
+|---------|-------------|
+| **LLM** | Neural network trained on text to predict next tokens |
+| **Transformer** | Architecture using self-attention mechanism |
+| **Tokenization** | Converting text to numerical tokens |
+| **Context Window** | Maximum tokens a model can process |
+| **Temperature** | Controls randomness in outputs (0=deterministic, >1=creative) |
+
+## API Quick Reference
+
+```python
+from openai import OpenAI
+client = OpenAI()
+
+response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[
+        {"role": "system", "content": "System prompt"},
+        {"role": "user", "content": "User message"}
+    ],
+    temperature=0.7,
+    max_tokens=1000
+)
+```
+
+## What's Next?
+
+[Chapter 3: Prompt Engineering](/book/chapter-3/overview) - Learn to craft effective prompts for optimal LLM outputs.

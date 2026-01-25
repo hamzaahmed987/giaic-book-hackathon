@@ -1,0 +1,486 @@
+---
+sidebar_position: 4
+title: "Exercises"
+description: Practice exercises to reinforce AI foundations
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Details from '@theme/Details';
+
+# Exercises
+
+Test your understanding with these hands-on exercises.
+
+## Exercise 1: AI Classification Challenge
+
+**Difficulty**: ⭐ Beginner
+
+### Task
+
+Classify the following scenarios into the correct type of AI (Narrow AI, General AI, or Superintelligent AI):
+
+| Scenario | Your Answer |
+|----------|-------------|
+| A chatbot that only answers customer service questions | ___ |
+| A robot that can learn any new skill by watching a human once | ___ |
+| A system that can solve any mathematical proof better than all mathematicians combined | ___ |
+| Spotify's recommendation system | ___ |
+| An AI that can write code, compose music, diagnose diseases, and do scientific research all at human level | ___ |
+
+<Details summary="Click to see the answers">
+
+| Scenario | Answer |
+|----------|--------|
+| A chatbot that only answers customer service questions | **Narrow AI** - Specialized for one task |
+| A robot that can learn any new skill by watching a human once | **General AI** - Human-level learning across domains |
+| A system that can solve any mathematical proof better than all mathematicians combined | **Superintelligent AI** - Exceeds all human capability |
+| Spotify's recommendation system | **Narrow AI** - Specialized for music recommendations |
+| An AI that can write code, compose music, diagnose diseases, and do scientific research all at human level | **General AI** - Human-level across multiple domains |
+
+</Details>
+
+## Exercise 2: Build Your Own Classifier
+
+**Difficulty**: ⭐⭐ Intermediate
+
+### Task
+
+Modify the code below to create a classifier that predicts whether an email is spam or not spam.
+
+```python
+# exercise_2_spam_classifier.py
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+
+# TODO: Add more training data
+training_emails = [
+    "Congratulations! You've won a free iPhone!",
+    "Meeting scheduled for tomorrow at 3pm",
+    "URGENT: Your account has been compromised",
+    "Can you review the attached document?",
+    # Add at least 6 more examples...
+]
+
+training_labels = [
+    "spam",
+    "not_spam",
+    "spam",
+    "not_spam",
+    # Add corresponding labels...
+]
+
+# TODO: Complete the classifier
+# 1. Create a CountVectorizer
+# 2. Transform the training data
+# 3. Train a MultinomialNB classifier
+# 4. Test on new emails
+
+test_emails = [
+    "FREE MONEY - Click here now!",
+    "Project update: we're on track for the deadline"
+]
+
+# Your code here...
+```
+
+<Details summary="Click to see the solution">
+
+```python
+# exercise_2_spam_classifier_solution.py
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+
+# Extended training data
+training_emails = [
+    "Congratulations! You've won a free iPhone!",
+    "Meeting scheduled for tomorrow at 3pm",
+    "URGENT: Your account has been compromised",
+    "Can you review the attached document?",
+    "Get rich quick! Make $5000 working from home",
+    "Please find the report attached",
+    "LIMITED TIME: 90% discount on luxury watches",
+    "Team lunch this Friday at noon",
+    "You've been selected for a special offer!",
+    "Quick question about the project timeline"
+]
+
+training_labels = [
+    "spam", "not_spam", "spam", "not_spam", "spam",
+    "not_spam", "spam", "not_spam", "spam", "not_spam"
+]
+
+# Create pipeline
+classifier = Pipeline([
+    ('vectorizer', CountVectorizer()),
+    ('classifier', MultinomialNB())
+])
+
+# Train
+classifier.fit(training_emails, training_labels)
+
+# Test
+test_emails = [
+    "FREE MONEY - Click here now!",
+    "Project update: we're on track for the deadline"
+]
+
+predictions = classifier.predict(test_emails)
+
+print("Spam Classifier Results:")
+for email, prediction in zip(test_emails, predictions):
+    print(f"  '{email[:40]}...' → {prediction}")
+
+# Output:
+# Spam Classifier Results:
+#   'FREE MONEY - Click here now!...' → spam
+#   'Project update: we're on track for the...' → not_spam
+```
+
+</Details>
+
+## Exercise 3: Conceptual Questions
+
+**Difficulty**: ⭐⭐ Intermediate
+
+Answer the following questions in your own words:
+
+### Question 1
+
+Why did AI experience "winters" (periods of reduced funding and interest)?
+
+<Details summary="Sample Answer">
+
+AI winters occurred because:
+
+1. **Overpromising**: Researchers made bold predictions that couldn't be delivered with the technology of the time
+2. **Limited Computing**: The hardware wasn't powerful enough for complex AI tasks
+3. **Data Scarcity**: Not enough training data was available
+4. **Wrong Approaches**: Early rule-based systems couldn't handle real-world complexity
+
+The lesson: Always be realistic about AI capabilities and limitations.
+
+</Details>
+
+### Question 2
+
+What are the key differences between supervised and unsupervised learning?
+
+<Details summary="Sample Answer">
+
+| Aspect | Supervised Learning | Unsupervised Learning |
+|--------|--------------------|-----------------------|
+| **Data** | Labeled (input + correct output) | Unlabeled (input only) |
+| **Goal** | Predict known outcomes | Discover hidden patterns |
+| **Examples** | Spam detection, price prediction | Customer segmentation, anomaly detection |
+| **Feedback** | Has ground truth to compare against | No ground truth |
+
+</Details>
+
+### Question 3
+
+Why is data quality often more important than algorithm choice?
+
+<Details summary="Sample Answer">
+
+Data quality is crucial because:
+
+1. **Garbage In, Garbage Out**: Poor data leads to poor predictions regardless of algorithm sophistication
+2. **Bias Amplification**: Biased data produces biased models
+3. **Noise Impact**: Noisy data makes it harder for any algorithm to find true patterns
+4. **Feature Importance**: The right features matter more than complex algorithms
+
+A simple algorithm with excellent data often outperforms a complex algorithm with poor data.
+
+</Details>
+
+## Exercise 4: Neural Network Math
+
+**Difficulty**: ⭐⭐⭐ Advanced
+
+### Task
+
+Calculate the output of this simple neural network by hand:
+
+```
+Input: [0.5, 0.8]
+Weights: [0.4, 0.6]
+Bias: 0.1
+Activation: Sigmoid
+
+sigmoid(x) = 1 / (1 + e^(-x))
+```
+
+Steps:
+1. Calculate weighted sum: Σ(input × weight) + bias
+2. Apply sigmoid activation
+
+<Details summary="Click to see the solution">
+
+**Step 1: Weighted Sum**
+```
+z = (0.5 × 0.4) + (0.8 × 0.6) + 0.1
+z = 0.2 + 0.48 + 0.1
+z = 0.78
+```
+
+**Step 2: Sigmoid Activation**
+```
+sigmoid(0.78) = 1 / (1 + e^(-0.78))
+             = 1 / (1 + 0.4584)
+             = 1 / 1.4584
+             = 0.6857
+```
+
+**Answer**: The neuron output is approximately **0.686** (or 68.6%)
+
+</Details>
+
+## Exercise 5: Real-World AI Identification
+
+**Difficulty**: ⭐ Beginner
+
+### Task
+
+For each of the following products/services, identify:
+1. What type of AI it uses
+2. What problem it solves
+3. What data it needs
+
+| Product | AI Type | Problem Solved | Data Needed |
+|---------|---------|----------------|-------------|
+| Google Search | ___ | ___ | ___ |
+| Tesla Autopilot | ___ | ___ | ___ |
+| Netflix Recommendations | ___ | ___ | ___ |
+| Google Translate | ___ | ___ | ___ |
+| Face ID on iPhone | ___ | ___ | ___ |
+
+<Details summary="Click to see the answers">
+
+| Product | AI Type | Problem Solved | Data Needed |
+|---------|---------|----------------|-------------|
+| Google Search | NLP + Ranking ML | Finding relevant information | Web pages, user queries, click data |
+| Tesla Autopilot | Computer Vision + Deep Learning | Autonomous driving | Camera feeds, sensor data, maps |
+| Netflix Recommendations | Collaborative Filtering + Deep Learning | Content discovery | Watch history, ratings, user profiles |
+| Google Translate | Neural Machine Translation (Transformers) | Language barriers | Parallel text in multiple languages |
+| Face ID on iPhone | Computer Vision (CNN) | Secure authentication | Face images, depth maps |
+
+</Details>
+
+## Exercise 6: Code Challenge
+
+**Difficulty**: ⭐⭐⭐ Advanced
+
+### Task
+
+Create a simple AI that can play Tic-Tac-Toe using a minimax algorithm (a form of AI decision-making).
+
+```python
+# exercise_6_tictactoe.py
+
+class TicTacToe:
+    def __init__(self):
+        self.board = [' ' for _ in range(9)]
+        self.current_player = 'X'
+
+    def print_board(self):
+        for i in range(0, 9, 3):
+            print(f" {self.board[i]} | {self.board[i+1]} | {self.board[i+2]} ")
+            if i < 6:
+                print("-----------")
+
+    def available_moves(self):
+        return [i for i, spot in enumerate(self.board) if spot == ' ']
+
+    def make_move(self, position, player):
+        if self.board[position] == ' ':
+            self.board[position] = player
+            return True
+        return False
+
+    def check_winner(self):
+        # TODO: Implement winning condition check
+        # Hint: Check rows, columns, and diagonals
+        pass
+
+    def minimax(self, is_maximizing):
+        # TODO: Implement minimax algorithm
+        # This is the AI "brain" that evaluates all possible moves
+        pass
+
+    def best_move(self):
+        # TODO: Find the best move using minimax
+        pass
+
+
+# Your implementation here...
+```
+
+<Details summary="Click to see hints">
+
+**Hints for minimax:**
+
+1. **Base cases**:
+   - If AI wins, return +10
+   - If opponent wins, return -10
+   - If tie, return 0
+
+2. **Recursive case**:
+   - If maximizing (AI's turn): find move with highest score
+   - If minimizing (opponent's turn): find move with lowest score
+
+3. **Backtrack**: Undo moves after evaluation
+
+</Details>
+
+<Details summary="Click to see the full solution">
+
+```python
+# exercise_6_tictactoe_solution.py
+
+class TicTacToe:
+    def __init__(self):
+        self.board = [' ' for _ in range(9)]
+
+    def print_board(self):
+        for i in range(0, 9, 3):
+            print(f" {self.board[i]} | {self.board[i+1]} | {self.board[i+2]} ")
+            if i < 6:
+                print("-----------")
+
+    def available_moves(self):
+        return [i for i, spot in enumerate(self.board) if spot == ' ']
+
+    def make_move(self, position, player):
+        if self.board[position] == ' ':
+            self.board[position] = player
+            return True
+        return False
+
+    def check_winner(self):
+        win_conditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Columns
+            [0, 4, 8], [2, 4, 6]              # Diagonals
+        ]
+
+        for condition in win_conditions:
+            if (self.board[condition[0]] == self.board[condition[1]] ==
+                self.board[condition[2]] != ' '):
+                return self.board[condition[0]]
+        return None
+
+    def is_full(self):
+        return ' ' not in self.board
+
+    def minimax(self, is_maximizing, alpha=-float('inf'), beta=float('inf')):
+        winner = self.check_winner()
+
+        if winner == 'O':  # AI wins
+            return 10
+        if winner == 'X':  # Human wins
+            return -10
+        if self.is_full():  # Tie
+            return 0
+
+        if is_maximizing:
+            best_score = -float('inf')
+            for move in self.available_moves():
+                self.board[move] = 'O'
+                score = self.minimax(False, alpha, beta)
+                self.board[move] = ' '
+                best_score = max(score, best_score)
+                alpha = max(alpha, score)
+                if beta <= alpha:
+                    break
+            return best_score
+        else:
+            best_score = float('inf')
+            for move in self.available_moves():
+                self.board[move] = 'X'
+                score = self.minimax(True, alpha, beta)
+                self.board[move] = ' '
+                best_score = min(score, best_score)
+                beta = min(beta, score)
+                if beta <= alpha:
+                    break
+            return best_score
+
+    def best_move(self):
+        best_score = -float('inf')
+        best_position = None
+
+        for move in self.available_moves():
+            self.board[move] = 'O'
+            score = self.minimax(False)
+            self.board[move] = ' '
+
+            if score > best_score:
+                best_score = score
+                best_position = move
+
+        return best_position
+
+
+# Play the game
+game = TicTacToe()
+
+print("Tic-Tac-Toe: You are X, AI is O")
+print("Enter position (0-8):\n")
+print(" 0 | 1 | 2 ")
+print("-----------")
+print(" 3 | 4 | 5 ")
+print("-----------")
+print(" 6 | 7 | 8 \n")
+
+while True:
+    # Human move
+    game.print_board()
+    move = int(input("Your move (0-8): "))
+
+    if not game.make_move(move, 'X'):
+        print("Invalid move!")
+        continue
+
+    if game.check_winner():
+        game.print_board()
+        print("You win! (Impossible with optimal AI...)")
+        break
+
+    if game.is_full():
+        game.print_board()
+        print("It's a tie!")
+        break
+
+    # AI move
+    ai_move = game.best_move()
+    game.make_move(ai_move, 'O')
+    print(f"AI plays position {ai_move}")
+
+    if game.check_winner():
+        game.print_board()
+        print("AI wins!")
+        break
+
+    if game.is_full():
+        game.print_board()
+        print("It's a tie!")
+        break
+```
+
+</Details>
+
+## Self-Assessment Checklist
+
+Before moving on, make sure you can:
+
+- [ ] Define AI, ML, and Deep Learning
+- [ ] Distinguish between Narrow AI and General AI
+- [ ] Explain how a basic classifier works
+- [ ] Understand the components of an AI system
+- [ ] Write simple ML code using scikit-learn
+
+---
+
+Completed all exercises? Review the [Chapter Summary](/book/chapter-1/summary).

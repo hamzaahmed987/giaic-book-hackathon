@@ -1,0 +1,258 @@
+/**
+ * AI-Powered Learning Platform Homepage Styles
+ */
+
+/* Hero Section */
+.heroBanner {
+  padding: 6rem 0;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.heroTitle {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: white;
+}
+
+.heroSubtitle {
+  font-size: 1.5rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.primaryButton {
+  background: white;
+  color: #667eea;
+  border: none;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  transition: all 0.3s ease;
+}
+
+.primaryButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  color: #764ba2;
+}
+
+.secondaryButton {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  transition: all 0.3s ease;
+}
+
+.secondaryButton:hover {
+  background: white;
+  color: #667eea;
+  transform: translateY(-3px);
+}
+
+/* Features Section */
+.features {
+  padding: 5rem 0;
+  background: var(--ifm-background-surface-color);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.feature {
+  text-align: center;
+  padding: 2rem;
+  border-radius: 16px;
+  background: var(--ifm-background-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  transition: all 0.3s ease;
+}
+
+.feature:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.featureIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.featureTitle {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.featureDescription {
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Chapters Section */
+.chapters {
+  padding: 5rem 0;
+}
+
+.sectionTitle {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.chaptersGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.chapterCard {
+  display: block;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+}
+
+.chapterCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
+}
+
+.chapterNum {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.chapterCard h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem;
+}
+
+.chapterCard p {
+  margin: 0;
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.9rem;
+}
+
+/* CTA Section */
+.cta {
+  padding: 5rem 0;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.cta h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta p {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.ctaButton {
+  background: white;
+  color: #667eea;
+  border: none;
+  font-weight: 600;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+}
+
+.ctaButton:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  color: #764ba2;
+}
+
+/* Responsive */
+@media screen and (max-width: 996px) {
+  .heroBanner {
+    padding: 4rem 1rem;
+  }
+
+  .heroTitle {
+    font-size: 2.5rem;
+  }
+
+  .heroSubtitle {
+    font-size: 1.2rem;
+  }
+
+  .featuresGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .chaptersGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 1rem;
+  }
+
+  .primaryButton,
+  .secondaryButton {
+    width: 100%;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .chaptersGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionTitle {
+    font-size: 2rem;
+  }
+
+  .cta h2 {
+    font-size: 1.75rem;
+  }
+}

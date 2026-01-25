@@ -1,0 +1,40 @@
+---
+sidebar_position: 1
+title: "Chapter 4: RAG Systems - Overview"
+description: Building Retrieval-Augmented Generation systems
+---
+
+import ChapterActions from '@site/src/components/ChapterActions';
+
+# Chapter 4: RAG Systems
+
+<ChapterActions chapterId="chapter-4" />
+
+## Learning Objectives
+
+:::info Objectives
+1. **Understand** how RAG systems combine retrieval with generation
+2. **Implement** vector embeddings and semantic search
+3. **Build** a complete RAG pipeline with Qdrant
+4. **Optimize** retrieval quality and response accuracy
+:::
+
+## Why RAG?
+
+LLMs have knowledge cutoffs and can hallucinate. RAG solves this by:
+- Grounding responses in your actual data
+- Providing up-to-date information
+- Adding citations and references
+
+```mermaid
+graph LR
+    A[User Query] --> B[Embed Query]
+    B --> C[Vector Search]
+    C --> D[Retrieve Docs]
+    D --> E[LLM + Context]
+    E --> F[Grounded Response]
+```
+
+---
+
+Continue to [Core Concepts](/book/chapter-4/concepts).

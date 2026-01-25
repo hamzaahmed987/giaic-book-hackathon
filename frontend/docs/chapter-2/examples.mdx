@@ -1,0 +1,104 @@
+---
+sidebar_position: 3
+title: "Practical Examples"
+description: Working with LLM APIs
+---
+
+# Practical Examples
+
+## Example 1: OpenAI API Basics
+
+```python
+# example_openai_basic.py
+from openai import OpenAI
+
+client = OpenAI()
+
+response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Explain quantum computing in one sentence."}
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+## Example 2: Streaming Responses
+
+```python
+# example_streaming.py
+from openai import OpenAI
+
+client = OpenAI()
+
+stream = client.chat.completions.create(
+    model="gpt-4",
+    messages=[
+        {"role": "user", "content": "Write a haiku about programming"}
+    ],
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+```
+
+## Example 3: Token Counting
+
+```python
+# example_tokens.py
+import tiktoken
+
+def count_tokens(text: str, model: str = "gpt-4") -> int:
+    """Count tokens in text for a specific model."""
+    encoding = tiktoken.encoding_for_model(model)
+    return len(encoding.encode(text))
+
+# Example
+text = "Hello, how are you today?"
+tokens = count_tokens(text)
+print(f"'{text}' = {tokens} tokens")
+
+# Visualize tokens
+encoding = tiktoken.encoding_for_model("gpt-4")
+tokens = encoding.encode(text)
+for token in tokens:
+    print(f"  {token} -> '{encoding.decode([token])}'")
+```
+
+## Example 4: Structured Output
+
+```python
+# example_structured.py
+from openai import OpenAI
+from pydantic import BaseModel
+
+client = OpenAI()
+
+class MovieReview(BaseModel):
+    title: str
+    rating: float
+    summary: str
+    pros: list[str]
+    cons: list[str]
+
+response = client.beta.chat.completions.parse(
+    model="gpt-4o",
+    messages=[
+        {"role": "user", "content": "Review the movie 'Inception'"}
+    ],
+    response_format=MovieReview
+)
+
+review = response.choices[0].message.parsed
+print(f"Title: {review.title}")
+print(f"Rating: {review.rating}/10")
+print(f"Summary: {review.summary}")
+```
+
+---
+
+Continue to [Exercises](/book/chapter-2/exercises).

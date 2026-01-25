@@ -1,0 +1,45 @@
+---
+sidebar_position: 1
+title: "Chapter 5: AI Agents - Overview"
+description: Building autonomous AI agents
+---
+
+import ChapterActions from '@site/src/components/ChapterActions';
+
+# Chapter 5: AI Agents
+
+<ChapterActions chapterId="chapter-5" />
+
+## Learning Objectives
+
+:::info Objectives
+1. **Understand** what AI agents are and how they differ from simple LLM calls
+2. **Build** agents with tools and function calling
+3. **Implement** multi-step reasoning and planning
+4. **Design** agent architectures using OpenAI Agents SDK
+:::
+
+## What Makes an Agent?
+
+An **AI Agent** is an LLM that can:
+- Take actions (call tools/functions)
+- Observe results
+- Reason and plan
+- Iterate until task completion
+
+```
+┌──────────────────────────────────────┐
+│           AGENT LOOP                  │
+│                                       │
+│   User Task ──▶ Think ──▶ Act        │
+│                   ▲         │         │
+│                   │         ▼         │
+│                Observe ◀── Tool      │
+│                                       │
+│        (repeat until done)            │
+└──────────────────────────────────────┘
+```
+
+---
+
+Continue to [Core Concepts](/book/chapter-5/concepts).

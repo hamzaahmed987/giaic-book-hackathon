@@ -1,0 +1,237 @@
+.container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.authCard,
+.profileCard {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.authCard h1,
+.profileCard h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+}
+
+.subtitle {
+  color: var(--ifm-color-emphasis-600);
+  margin-bottom: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputGroup label {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.inputGroup input {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: var(--ifm-background-color);
+  color: var(--ifm-color-content);
+  transition: border-color 0.2s ease;
+}
+
+.inputGroup input:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+}
+
+.submitButton {
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.switchText {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.switchButton {
+  background: none;
+  border: none;
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.switchButton:hover {
+  text-decoration: underline;
+}
+
+/* Profile Page Styles */
+.profileSection {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.profileSection h2 {
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-600);
+  margin: -0.5rem 0 1rem;
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.radioLabel:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.radioLabel input {
+  display: none;
+}
+
+.radioButton {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--ifm-color-emphasis-400);
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+  margin-top: 2px;
+}
+
+.radioLabel input:checked + .radioButton {
+  border-color: var(--ifm-color-primary);
+}
+
+.radioLabel input:checked + .radioButton::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background: var(--ifm-color-primary);
+  border-radius: 50%;
+}
+
+.radioLabel div {
+  display: flex;
+  flex-direction: column;
+}
+
+.radioLabel small {
+  color: var(--ifm-color-emphasis-600);
+  font-size: 0.8rem;
+}
+
+.chipGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 20px;
+  background: transparent;
+  color: var(--ifm-color-content);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip:hover {
+  border-color: var(--ifm-color-primary);
+}
+
+.chipActive {
+  background: var(--ifm-color-primary);
+  border-color: var(--ifm-color-primary);
+  color: white;
+}
+
+.saveButton {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.saveButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.signOutButton {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--ifm-color-danger);
+  border: 1px solid var(--ifm-color-danger);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.signOutButton:hover {
+  background: var(--ifm-color-danger);
+  color: white;
+}

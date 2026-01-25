@@ -1,0 +1,80 @@
+---
+sidebar_position: 4
+title: "Exercises"
+description: Practice prompt engineering techniques
+---
+
+import Details from '@theme/Details';
+
+# Exercises
+
+## Exercise 1: Prompt Improvement
+
+Improve this vague prompt:
+
+```
+Bad: "Summarize this"
+```
+
+<Details summary="Solution">
+
+```
+Good: "Provide a 3-sentence summary of the following article, highlighting:
+1. The main argument or thesis
+2. Key supporting evidence
+3. The conclusion or implications
+
+Article:
+{text}
+"
+```
+
+</Details>
+
+## Exercise 2: Few-Shot Design
+
+Create a few-shot prompt for converting informal text to professional email format.
+
+<Details summary="Solution">
+
+```
+Convert informal messages to professional emails.
+
+Example 1:
+Input: "hey can u send the report asap?"
+Output: "Hello, Could you please send me the report at your earliest convenience? Thank you."
+
+Example 2:
+Input: "thx for the help yesterday!"
+Output: "Thank you for your assistance yesterday. I greatly appreciate your support."
+
+Now convert:
+Input: "{user_message}"
+Output:
+```
+
+</Details>
+
+## Exercise 3: Chain of Thought
+
+Design a CoT prompt for solving logic puzzles.
+
+<Details summary="Solution">
+
+```
+Solve this logic puzzle step by step. Show your reasoning at each step.
+
+Puzzle: {puzzle}
+
+Let me work through this systematically:
+1. First, let me identify what we know for certain...
+2. Next, I'll consider what this implies...
+3. This means that...
+4. Therefore, the answer is...
+```
+
+</Details>
+
+---
+
+Review the [Summary](/book/chapter-3/summary).

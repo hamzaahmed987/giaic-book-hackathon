@@ -1,0 +1,91 @@
+---
+sidebar_position: 4
+title: "Exercises"
+description: Practice building AI agents
+---
+
+import Details from '@theme/Details';
+
+# Exercises
+
+## Exercise 1: Add a Calculator Tool
+
+Create an agent with a calculator tool that can handle complex math.
+
+<Details summary="Solution">
+
+```python
+import math
+
+def calculator(expression: str) -> str:
+    """Safely evaluate mathematical expressions."""
+    allowed = {
+        'abs': abs, 'round': round,
+        'sin': math.sin, 'cos': math.cos, 'tan': math.tan,
+        'sqrt': math.sqrt, 'log': math.log, 'pi': math.pi
+    }
+    try:
+        result = eval(expression, {"__builtins__": {}}, allowed)
+        return str(result)
+    except Exception as e:
+        return f"Error: {e}"
+
+tools = [{
+    "type": "function",
+    "function": {
+        "name": "calculate",
+        "description": "Evaluate math expressions. Supports: +, -, *, /, sqrt, sin, cos, tan, log, pi",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "expression": {"type": "string", "description": "Math expression like 'sqrt(16) + sin(pi/2)'"}
+            },
+            "required": ["expression"]
+        }
+    }
+}]
+```
+
+</Details>
+
+## Exercise 2: Multi-Tool Agent
+
+Build an agent that can search, calculate, and write files.
+
+<Details summary="Solution">
+
+```python
+class MultiToolAgent:
+    def __init__(self):
+        self.tools = [
+            self._search_tool(),
+            self._calc_tool(),
+            self._write_tool()
+        ]
+        self.tool_functions = {
+            "search": self.search,
+            "calculate": self.calculate,
+            "write_file": self.write_file
+        }
+
+    def search(self, query: str) -> str:
+        # Implement search logic
+        return f"Results for '{query}': ..."
+
+    def calculate(self, expression: str) -> str:
+        return str(eval(expression))
+
+    def write_file(self, filename: str, content: str) -> str:
+        with open(filename, 'w') as f:
+            f.write(content)
+        return f"Written to {filename}"
+
+    def execute_tool(self, name: str, args: dict) -> str:
+        return self.tool_functions[name](**args)
+```
+
+</Details>
+
+---
+
+Review the [Summary](/book/chapter-5/summary).

@@ -1,0 +1,51 @@
+---
+sidebar_position: 5
+title: "Summary"
+description: Key takeaways from AI Agents
+---
+
+# Chapter 5 Summary
+
+## Agent Loop
+
+```
+Think → Act → Observe → Repeat
+```
+
+## Key Components
+
+| Component | Purpose |
+|-----------|---------|
+| **LLM** | Reasoning and planning |
+| **Tools** | Taking actions |
+| **Memory** | Conversation history |
+| **Orchestrator** | Managing the loop |
+
+## Tool Definition Template
+
+```python
+{
+    "type": "function",
+    "function": {
+        "name": "tool_name",
+        "description": "When and why to use this tool",
+        "parameters": {
+            "type": "object",
+            "properties": {...},
+            "required": [...]
+        }
+    }
+}
+```
+
+## Best Practices
+
+1. Write clear tool descriptions
+2. Handle errors gracefully
+3. Set iteration limits
+4. Log tool calls for debugging
+5. Validate tool outputs
+
+---
+
+Next: [Chapter 6: Building AI Applications](/book/chapter-6/overview) - Put it all together!

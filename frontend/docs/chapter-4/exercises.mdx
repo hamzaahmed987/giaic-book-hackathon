@@ -1,0 +1,71 @@
+---
+sidebar_position: 4
+title: "Exercises"
+description: Practice building RAG systems
+---
+
+import Details from '@theme/Details';
+
+# Exercises
+
+## Exercise 1: Implement Hybrid Search
+
+Combine keyword search with semantic search for better retrieval.
+
+<Details summary="Solution">
+
+```python
+def hybrid_search(self, query: str, top_k: int = 5):
+    # Semantic search
+    embedding = self.get_embedding(query)
+    semantic_results = self.qdrant.search(
+        collection_name=self.collection,
+        query_vector=embedding,
+        limit=top_k * 2
+    )
+
+    # Keyword filter
+    keywords = query.lower().split()
+    filtered = [
+        r for r in semantic_results
+        if any(kw in r.payload["text"].lower() for kw in keywords)
+    ]
+
+    # Combine and deduplicate
+    return filtered[:top_k] if filtered else semantic_results[:top_k]
+```
+
+</Details>
+
+## Exercise 2: Implement Reranking
+
+Add a reranking step to improve retrieval quality.
+
+<Details summary="Solution">
+
+```python
+def rerank_results(self, query: str, results: list) -> list:
+    """Use LLM to rerank results by relevance."""
+    texts = [r.payload["text"] for r in results]
+
+    response = self.openai.chat.completions.create(
+        model="gpt-4",
+        messages=[{
+            "role": "user",
+            "content": f"""Rank these passages by relevance to: "{query}"
+Return only the indices in order of relevance (e.g., "3,1,2,4,0")
+
+Passages:
+{chr(10).join(f'{i}. {t[:200]}...' for i, t in enumerate(texts))}"""
+        }]
+    )
+
+    order = [int(i) for i in response.choices[0].message.content.split(",")]
+    return [results[i] for i in order]
+```
+
+</Details>
+
+---
+
+Review the [Summary](/book/chapter-4/summary).

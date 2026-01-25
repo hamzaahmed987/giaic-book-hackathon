@@ -1,0 +1,116 @@
+---
+sidebar_position: 5
+title: "Summary"
+description: Key takeaways from AI Foundations
+---
+
+# Chapter 1 Summary
+
+## Key Concepts Recap
+
+### What is AI?
+
+```
+AI = Creating systems that perform tasks requiring human intelligence
+```
+
+**Core capabilities**: Learning, Reasoning, Problem Solving, Perception, Language Understanding
+
+### The AI Hierarchy
+
+```
+┌────────────────────────────────────┐
+│       Artificial Intelligence      │ ← Broadest concept
+│  ┌──────────────────────────────┐ │
+│  │      Machine Learning        │ │ ← Learning from data
+│  │  ┌────────────────────────┐  │ │
+│  │  │     Deep Learning      │  │ │ ← Neural networks
+│  │  └────────────────────────┘  │ │
+│  └──────────────────────────────┘ │
+└────────────────────────────────────┘
+```
+
+### Types of AI
+
+| Type | Status | Capability |
+|------|--------|------------|
+| **Narrow AI** | ✅ Exists today | Specialized for one task |
+| **General AI** | ❌ Theoretical | Human-level across all domains |
+| **Superintelligent AI** | ❌ Hypothetical | Exceeds all human intelligence |
+
+### AI System Components
+
+1. **Data** → The fuel
+2. **Model/Algorithm** → The brain
+3. **Training** → The learning process
+4. **Inference** → Using the trained model
+
+## Key Formulas
+
+**Neuron Output**:
+```
+output = activation(Σ(inputs × weights) + bias)
+```
+
+**Common Activation (Sigmoid)**:
+```
+σ(x) = 1 / (1 + e^(-x))
+```
+
+## Quick Reference Code
+
+```python
+# Basic ML Pipeline
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+
+# 1. Split data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# 2. Train model
+model = DecisionTreeClassifier()
+model.fit(X_train, y_train)
+
+# 3. Predict
+predictions = model.predict(X_test)
+```
+
+## Common Mistakes to Avoid
+
+| Mistake | Why It's Wrong | Correct Approach |
+|---------|---------------|------------------|
+| Calling chatbots "AGI" | Current AI is narrow, not general | Recognize limitations of narrow AI |
+| Ignoring data quality | Poor data → poor results | Invest in data cleaning |
+| Overfitting to training data | Model memorizes, doesn't generalize | Use train/test splits, validation |
+| Expecting AI to "understand" | AI finds patterns, doesn't truly understand | Design for pattern matching |
+
+## Glossary
+
+| Term | Definition |
+|------|------------|
+| **AI** | Artificial Intelligence - machines mimicking human intelligence |
+| **ML** | Machine Learning - learning from data without explicit programming |
+| **DL** | Deep Learning - ML using multi-layer neural networks |
+| **Training** | Process of learning patterns from data |
+| **Inference** | Using a trained model to make predictions |
+| **Features** | Input variables used to make predictions |
+| **Labels** | Target/output variables (in supervised learning) |
+| **Overfitting** | Model performs well on training data but poorly on new data |
+| **Epoch** | One complete pass through the training dataset |
+
+## What's Next?
+
+In [Chapter 2: LLM Fundamentals](/book/chapter-2/overview), you'll learn:
+
+- How Large Language Models work
+- The Transformer architecture
+- Tokenization and embeddings
+- How models like GPT generate text
+
+---
+
+:::tip Chapter Complete!
+You've completed Chapter 1! You now understand the foundations of AI.
+
+**Ready for the next chapter?** → [Chapter 2: LLM Fundamentals](/book/chapter-2/overview)
+:::

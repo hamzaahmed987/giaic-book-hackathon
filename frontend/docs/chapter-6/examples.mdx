@@ -1,0 +1,181 @@
+---
+sidebar_position: 3
+title: "Practical Examples"
+description: Building the complete application
+---
+
+# Practical Examples
+
+## Example 1: Complete Backend Setup
+
+```python
+# backend/app/main.py
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from app.api import chat, auth, content
+
+app = FastAPI(title="AI Book Platform API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(chat.router, prefix="/api/chat", tags=["Chat"])
+app.include_router(auth.router, prefix="/api/auth", tags=["Auth"])
+app.include_router(content.router, prefix="/api/content", tags=["Content"])
+
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy"}
+```
+
+## Example 2: RAG Chatbot Endpoint
+
+```python
+# backend/app/api/chat.py
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
+from app.services.rag_service import RAGService
+from app.core.deps import get_current_user
+
+router = APIRouter()
+
+class ChatRequest(BaseModel):
+    query: str
+    selected_text: str | None = None
+    chapter_id: str | None = None
+
+class ChatResponse(BaseModel):
+    answer: str
+    citations: list[dict]
+
+@router.post("/query", response_model=ChatResponse)
+async def chat_query(
+    request: ChatRequest,
+    rag_service: RAGService = Depends(),
+    user = Depends(get_current_user)
+):
+    # Build context
+    context = request.selected_text or ""
+
+    # Query RAG
+    result = await rag_service.query(
+        query=request.query,
+        context=context,
+        user_profile=user.profile if user else None,
+        filter_chapter=request.chapter_id
+    )
+
+    return ChatResponse(
+        answer=result["answer"],
+        citations=result["sources"]
+    )
+```
+
+## Example 3: Personalization Service
+
+```python
+# backend/app/services/personalization_service.py
+from openai import AsyncOpenAI
+from app.infrastructure.cache import Cache
+
+class PersonalizationService:
+    def __init__(self, openai: AsyncOpenAI, cache: Cache):
+        self.openai = openai
+        self.cache = cache
+
+    async def personalize_content(
+        self,
+        content: str,
+        user_profile: dict,
+        chapter_id: str
+    ) -> str:
+        # Check cache first
+        cache_key = f"personalized:{chapter_id}:{user_profile['id']}"
+        cached = await self.cache.get(cache_key)
+        if cached:
+            return cached
+
+        # Generate personalized content
+        prompt = self._build_personalization_prompt(content, user_profile)
+
+        response = await self.openai.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You adapt educational content to match learner profiles."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+
+        personalized = response.choices[0].message.content
+
+        # Cache result
+        await self.cache.set(cache_key, personalized, ttl=86400)
+
+        return personalized
+
+    def _build_personalization_prompt(self, content: str, profile: dict) -> str:
+        return f"""Adapt this content for a learner with:
+- Experience Level: {profile.get('experience_level', 'beginner')}
+- Known Languages: {', '.join(profile.get('known_languages', []))}
+- Goals: {', '.join(profile.get('goals', []))}
+
+Adjust explanations, examples, and depth appropriately.
+Keep all code blocks unchanged.
+
+Content:
+{content}
+"""
+```
+
+## Example 4: Translation Service
+
+```python
+# backend/app/services/translation_service.py
+import re
+from openai import AsyncOpenAI
+
+class TranslationService:
+    def __init__(self, openai: AsyncOpenAI):
+        self.openai = openai
+
+    async def translate_to_urdu(self, content: str) -> str:
+        # Extract code blocks to preserve them
+        code_blocks = re.findall(r'```[\s\S]*?```', content)
+        placeholders = [f"__CODE_BLOCK_{i}__" for i in range(len(code_blocks))]
+
+        # Replace code blocks with placeholders
+        protected_content = content
+        for block, placeholder in zip(code_blocks, placeholders):
+            protected_content = protected_content.replace(block, placeholder)
+
+        # Translate
+        response = await self.openai.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": """You are a translator. Translate to Urdu.
+Rules:
+- Keep technical terms in English
+- Preserve all placeholders like __CODE_BLOCK_0__
+- Maintain markdown formatting
+- Keep headings structure"""},
+                {"role": "user", "content": protected_content}
+            ]
+        )
+
+        translated = response.choices[0].message.content
+
+        # Restore code blocks
+        for placeholder, block in zip(placeholders, code_blocks):
+            translated = translated.replace(placeholder, block)
+
+        return translated
+```
+
+---
+
+Continue to [Exercises](/book/chapter-6/exercises).

@@ -1,0 +1,102 @@
+---
+sidebar_position: 4
+title: "Exercises"
+description: Practice working with LLMs
+---
+
+import Details from '@theme/Details';
+
+# Exercises
+
+## Exercise 1: API Exploration
+
+Make API calls with different parameters and observe the effects:
+
+```python
+# Try different temperature values
+temperatures = [0.0, 0.5, 1.0, 1.5]
+prompt = "Write a creative opening line for a story"
+
+for temp in temperatures:
+    # Your code here - observe how temperature affects creativity
+    pass
+```
+
+<Details summary="Solution">
+
+```python
+from openai import OpenAI
+client = OpenAI()
+
+prompt = "Write a creative opening line for a story"
+
+for temp in [0.0, 0.5, 1.0, 1.5]:
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=temp
+    )
+    print(f"Temperature {temp}: {response.choices[0].message.content}")
+```
+
+</Details>
+
+## Exercise 2: Token Analysis
+
+Calculate the token count and cost for a document:
+
+<Details summary="Solution">
+
+```python
+import tiktoken
+
+def analyze_document(text, model="gpt-4"):
+    encoding = tiktoken.encoding_for_model(model)
+    tokens = encoding.encode(text)
+
+    # Pricing (example rates)
+    input_cost = len(tokens) * 0.00003  # $0.03 per 1K tokens
+
+    return {
+        "characters": len(text),
+        "tokens": len(tokens),
+        "estimated_cost": f"${input_cost:.4f}"
+    }
+```
+
+</Details>
+
+## Exercise 3: Build a Simple Chatbot
+
+Create a chatbot that maintains conversation history:
+
+<Details summary="Solution">
+
+```python
+from openai import OpenAI
+
+client = OpenAI()
+messages = [{"role": "system", "content": "You are a helpful assistant."}]
+
+while True:
+    user_input = input("You: ")
+    if user_input.lower() == 'quit':
+        break
+
+    messages.append({"role": "user", "content": user_input})
+
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=messages
+    )
+
+    assistant_message = response.choices[0].message.content
+    messages.append({"role": "assistant", "content": assistant_message})
+    print(f"Assistant: {assistant_message}")
+```
+
+</Details>
+
+---
+
+Review the [Summary](/book/chapter-2/summary).

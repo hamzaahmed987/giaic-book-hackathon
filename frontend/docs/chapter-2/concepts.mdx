@@ -1,0 +1,179 @@
+---
+sidebar_position: 2
+title: "Core Concepts"
+description: Understanding how Large Language Models work
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Core Concepts of Large Language Models
+
+## What is a Large Language Model?
+
+A **Large Language Model (LLM)** is a neural network trained on massive amounts of text data to understand and generate human-like language.
+
+:::note Key Insight
+LLMs are essentially sophisticated "next word predictors" - they predict what word (or token) should come next given a sequence of previous words.
+:::
+
+## The Transformer Architecture
+
+The Transformer, introduced in the paper "Attention Is All You Need" (2017), revolutionized NLP.
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                 TRANSFORMER ARCHITECTURE                │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  Input: "The cat sat on the"                           │
+│            ↓                                            │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │              TOKENIZATION                        │   │
+│  │     ["The", "cat", "sat", "on", "the"]          │   │
+│  └─────────────────────────────────────────────────┘   │
+│            ↓                                            │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │              EMBEDDINGS                          │   │
+│  │     Convert tokens to numerical vectors          │   │
+│  └─────────────────────────────────────────────────┘   │
+│            ↓                                            │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │         SELF-ATTENTION LAYERS                    │   │
+│  │     "Which words relate to each other?"          │   │
+│  │                   ×N                             │   │
+│  └─────────────────────────────────────────────────┘   │
+│            ↓                                            │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │           OUTPUT LAYER                           │   │
+│  │     Probability distribution over vocabulary     │   │
+│  └─────────────────────────────────────────────────┘   │
+│            ↓                                            │
+│  Output: "mat" (highest probability next token)        │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
+
+## Self-Attention Mechanism
+
+The key innovation of Transformers is **self-attention** - allowing each word to "look at" all other words in the input.
+
+```python
+# Simplified attention calculation
+def attention(query, key, value):
+    """
+    Query: What am I looking for?
+    Key: What do I contain?
+    Value: What do I actually have to offer?
+    """
+    # Calculate attention scores
+    scores = query @ key.transpose(-2, -1) / sqrt(d_k)
+
+    # Convert to probabilities
+    weights = softmax(scores)
+
+    # Weighted combination of values
+    return weights @ value
+```
+
+### Example: Attention in Action
+
+For the sentence: "The **cat** sat on the **mat** because **it** was tired"
+
+When processing "it", attention helps determine that "it" refers to "cat" (not "mat"):
+
+| Token | Attention to "cat" | Attention to "mat" |
+|-------|-------------------|-------------------|
+| it | **0.72** | 0.18 |
+
+## Tokenization
+
+LLMs don't process raw text - they work with **tokens** (pieces of words).
+
+<Tabs>
+  <TabItem value="bpe" label="BPE Tokenization" default>
+
+**Byte Pair Encoding (BPE)** breaks words into common subword units:
+
+```python
+# Example tokenization
+text = "unhappiness"
+tokens = ["un", "happiness"]  # or ["un", "hap", "pi", "ness"]
+
+# Common words stay whole
+text = "the"
+tokens = ["the"]
+
+# Rare words get split
+text = "ChatGPT"
+tokens = ["Chat", "G", "PT"]
+```
+
+  </TabItem>
+  <TabItem value="limits" label="Token Limits">
+
+Models have maximum context windows (token limits):
+
+| Model | Max Tokens |
+|-------|-----------|
+| GPT-3.5 | 4,096 |
+| GPT-4 | 8,192 - 128,000 |
+| Claude 3 | 200,000 |
+
+**Rule of thumb**: ~4 characters ≈ 1 token (English)
+
+  </TabItem>
+</Tabs>
+
+## How LLMs Learn
+
+### Pre-training
+
+LLMs are trained on massive datasets (books, websites, code) to predict the next token:
+
+```python
+# Pre-training objective (simplified)
+for text in training_data:  # Trillions of tokens
+    for position in range(len(text)):
+        context = text[:position]
+        next_token = text[position]
+
+        # Model predicts next token
+        prediction = model(context)
+
+        # Calculate loss and update weights
+        loss = cross_entropy(prediction, next_token)
+        loss.backward()
+        optimizer.step()
+```
+
+### Fine-tuning
+
+After pre-training, models are fine-tuned for specific tasks:
+
+1. **Instruction Tuning**: Follow user instructions
+2. **RLHF**: Reinforcement Learning from Human Feedback
+3. **Domain Adaptation**: Specialize for specific fields
+
+## Model Comparison
+
+| Model | Provider | Strengths | Best For |
+|-------|----------|-----------|----------|
+| GPT-4 | OpenAI | Reasoning, code | Complex tasks |
+| Claude 3 | Anthropic | Long context, safety | Analysis, writing |
+| Gemini | Google | Multimodal | Vision + text |
+| Llama 3 | Meta | Open source | Self-hosting |
+
+## Key Takeaways
+
+:::tip Remember
+1. LLMs predict the next token based on context
+2. Transformers use self-attention to understand relationships
+3. Tokenization converts text to numbers
+4. Context window limits how much text can be processed
+5. Pre-training + fine-tuning = capable assistants
+:::
+
+---
+
+Ready for hands-on examples? Continue to [Examples](/book/chapter-2/examples).

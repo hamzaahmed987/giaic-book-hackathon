@@ -1,0 +1,48 @@
+---
+sidebar_position: 1
+title: "Chapter 6: Building AI Applications - Overview"
+description: Full-stack AI application development
+---
+
+import ChapterActions from '@site/src/components/ChapterActions';
+
+# Chapter 6: Building AI Applications
+
+<ChapterActions chapterId="chapter-6" />
+
+## Learning Objectives
+
+:::info Objectives
+1. **Architect** production-ready AI applications
+2. **Integrate** all concepts: LLMs, RAG, Agents, Prompts
+3. **Build** a complete AI-powered application
+4. **Deploy** with proper infrastructure and monitoring
+:::
+
+## What You'll Build
+
+A complete AI-powered book platform with:
+- RAG chatbot for Q&A
+- User authentication and profiles
+- Content personalization
+- Multilingual support
+
+```
+┌────────────────────────────────────────────────────────┐
+│                  AI APPLICATION STACK                  │
+├────────────────────────────────────────────────────────┤
+│  FRONTEND       │  Docusaurus + React                  │
+├─────────────────┼──────────────────────────────────────┤
+│  BACKEND        │  FastAPI + OpenAI Agents SDK         │
+├─────────────────┼──────────────────────────────────────┤
+│  DATABASE       │  Neon Postgres (users, sessions)     │
+├─────────────────┼──────────────────────────────────────┤
+│  VECTOR DB      │  Qdrant (embeddings, RAG)            │
+├─────────────────┼──────────────────────────────────────┤
+│  AI SERVICES    │  OpenAI API + Custom Agents          │
+└─────────────────┴──────────────────────────────────────┘
+```
+
+---
+
+Continue to [Core Concepts](/book/chapter-6/concepts).

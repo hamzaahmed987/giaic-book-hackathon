@@ -1,0 +1,229 @@
+/**
+ * AI-Powered Learning Platform Custom Styles
+ */
+
+/* Color Variables */
+:root {
+  --ifm-color-primary: #667eea;
+  --ifm-color-primary-dark: #5a6fd6;
+  --ifm-color-primary-darker: #4f61c2;
+  --ifm-color-primary-darkest: #3d4ea0;
+  --ifm-color-primary-light: #7a8eee;
+  --ifm-color-primary-lighter: #8e9ef2;
+  --ifm-color-primary-lightest: #b3bff8;
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(102, 126, 234, 0.1);
+
+  /* Custom variables */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --shadow-primary: 0 4px 20px rgba(102, 126, 234, 0.3);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #8e9ef2;
+  --ifm-color-primary-dark: #7a8eee;
+  --ifm-color-primary-darker: #667eea;
+  --ifm-color-primary-darkest: #4f61c2;
+  --ifm-color-primary-light: #a2aef6;
+  --ifm-color-primary-lighter: #b6bef8;
+  --ifm-color-primary-lightest: #d4d9fb;
+
+  --docusaurus-highlighted-code-line-bg: rgba(102, 126, 234, 0.2);
+}
+
+/* Typography */
+.markdown h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.markdown h2 {
+  border-bottom: 2px solid var(--ifm-color-emphasis-200);
+  padding-bottom: 0.5rem;
+  margin-top: 2rem;
+}
+
+/* Code Blocks */
+.prism-code {
+  border-radius: 8px;
+}
+
+pre {
+  border: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* Tables */
+table {
+  display: table;
+  width: 100%;
+}
+
+table th {
+  background: var(--ifm-color-emphasis-100);
+}
+
+/* Admonitions */
+.admonition {
+  border-radius: 8px;
+  border-left-width: 4px;
+}
+
+/* Links */
+a {
+  transition: color 0.2s ease;
+}
+
+/* Sidebar */
+.theme-doc-sidebar-container {
+  border-right: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.menu__link {
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.menu__link:hover {
+  background: var(--ifm-color-emphasis-100);
+}
+
+.menu__link--active {
+  background: var(--ifm-color-primary-lightest) !important;
+  color: var(--ifm-color-primary-darkest) !important;
+}
+
+/* Navbar */
+.navbar {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar__title {
+  font-weight: 700;
+}
+
+/* Footer */
+.footer {
+  background: var(--ifm-color-emphasis-100);
+}
+
+/* Cards and Containers */
+.card {
+  border-radius: 12px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-primary);
+}
+
+/* Buttons */
+.button {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.button--primary {
+  background: var(--gradient-primary);
+  border: none;
+}
+
+.button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary);
+}
+
+/* Tabs */
+.tabs__item {
+  border-radius: 6px 6px 0 0;
+  transition: all 0.2s ease;
+}
+
+.tabs__item--active {
+  border-bottom-color: var(--ifm-color-primary);
+}
+
+/* TOC */
+.table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+/* Mermaid Diagrams */
+.docusaurus-mermaid-container {
+  margin: 1.5rem 0;
+}
+
+/* Details/Accordion */
+details {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.5rem 0;
+}
+
+details[open] summary {
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  margin-bottom: 1rem;
+}
+
+/* Custom chapter header */
+.chapter-header {
+  background: var(--gradient-primary);
+  padding: 2rem;
+  border-radius: 12px;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+/* Progress indicator */
+.progress-bar {
+  height: 4px;
+  background: var(--ifm-color-emphasis-200);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  transition: width 0.3s ease;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 996px) {
+  .markdown h1 {
+    font-size: 2rem;
+  }
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* Print styles */
+@media print {
+  .navbar,
+  .footer,
+  .theme-doc-sidebar-container,
+  .chatToggle,
+  .chatWindow {
+    display: none !important;
+  }
+}
