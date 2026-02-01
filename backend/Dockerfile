@@ -1,4 +1,5 @@
 # AI Book Platform Backend Dockerfile
+# NOTE: This is maintained for compatibility but Vercel deployment uses vercel.json
 FROM python:3.11-slim
 
 # Set working directory

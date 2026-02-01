@@ -1,27 +1,36 @@
 """
 Database configuration and session management.
+Optimized for serverless/Vercel deployment.
 """
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
 
-# Lazy engine creation to avoid import-time issues
+# Global engine and session maker for reuse across requests
 _engine = None
 _async_session_maker = None
+
 
 def get_engine():
     global _engine
     if _engine is None:
-        # Ensure settings are loaded properly
+        # For serverless environments, use NullPool to avoid connection issues
         _engine = create_async_engine(
             settings.DATABASE_URL,
             echo=settings.DEBUG,
-            pool_pre_ping=True,
+            poolclass=NullPool,  # Use NullPool for serverless environments
+            connect_args={
+                "server_settings": {
+                    "application_name": "ai-book-platform-vercel",
+                },
+            },
         )
     return _engine
+
 
 def get_async_session_maker():
     global _async_session_maker
@@ -32,6 +41,7 @@ def get_async_session_maker():
             expire_on_commit=False,
         )
     return _async_session_maker
+
 
 # Base class for models
 Base = declarative_base()
@@ -52,5 +62,6 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
 
 async def init_db():
     """Initialize database tables."""
-    async with get_engine().begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+    # In serverless environments, avoid running DDL operations in request handlers
+    # This should be handled separately during deployment
+    pass

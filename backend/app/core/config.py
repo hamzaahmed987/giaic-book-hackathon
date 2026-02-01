@@ -1,5 +1,6 @@
 """
 Application configuration using Pydantic Settings.
+Optimized for Vercel deployment.
 """
 from typing import List
 
@@ -20,14 +21,14 @@ class Settings(BaseSettings):
     APP_NAME: str = "AI Book Platform"
     DEBUG: bool = False
 
-    # Database
-    DATABASE_URL: str = "postgresql+asyncpg://user:password@localhost:5432/aibook"
+    # Database - using environment variables for Vercel
+    DATABASE_URL: str = ""
 
     @model_validator(mode='after')
     def validate_configs(self):
         """Validate and fix configurations."""
         # Ensure the database URL uses the asyncpg driver
-        if self.DATABASE_URL.startswith("postgresql://") and not self.DATABASE_URL.startswith("postgresql+asyncpg://"):
+        if self.DATABASE_URL and self.DATABASE_URL.startswith("postgresql://") and not self.DATABASE_URL.startswith("postgresql+asyncpg://"):
             self.DATABASE_URL = self.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://", 1)
 
         # Validate OpenRouter model
@@ -44,8 +45,8 @@ class Settings(BaseSettings):
 
         return self
 
-    # Vector Database (Qdrant)
-    QDRANT_URL: str = "http://localhost:6333"
+    # Vector Database (Qdrant) - external service
+    QDRANT_URL: str = ""
     QDRANT_API_KEY: str = ""
     QDRANT_COLLECTION: str = "book_content"
 
@@ -66,21 +67,28 @@ class Settings(BaseSettings):
     LLM_PROVIDER: str = "openrouter"
 
     # Authentication
-    SECRET_KEY: str = "your-super-secret-key-change-in-production"
+    SECRET_KEY: str = ""
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
 
-    # CORS - stored as comma-separated string
-    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000"
+    # CORS - Allow Vercel preview deployments and production
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001,https://your-frontend.vercel.app"
 
-    # Redis (for caching)
-    REDIS_URL: str = "redis://localhost:6379"
+    # Redis (for caching) - external service
+    REDIS_URL: str = ""
 
     @computed_field
     @property
     def cors_origins_list(self) -> List[str]:
         """Parse CORS_ORIGINS string into a list."""
-        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+        origins = [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+        
+        # Add Vercel preview deployment domains dynamically
+        vercel_url = "https://your-project-git-main.your-username.vercel.app"
+        if vercel_url not in origins:
+            origins.append(vercel_url)
+            
+        return origins
 
 
 settings = Settings()

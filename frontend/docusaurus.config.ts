@@ -11,12 +11,9 @@ const config: Config = {
     v4: true,
   },
 
-  // GitHub Pages deployment config
-  url: 'https://your-username.github.io',
-  // Use '/' for local dev, '/giaic-hackathon/' for GitHub Pages
-  baseUrl: process.env.NODE_ENV === 'production' ? '/giaic-hackathon/' : '/',
-  organizationName: 'your-username',
-  projectName: 'giaic-hackathon',
+  // Updated for Vercel deployment
+  url: 'https://your-frontend.vercel.app',
+  baseUrl: '/',
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
@@ -30,9 +27,9 @@ const config: Config = {
   // Custom scripts for chatbot
   scripts: [],
 
-  // Custom fields for API endpoints
+  // Custom fields for API endpoints - now configurable via environment
   customFields: {
-    apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:8001',
+    apiBaseUrl: process.env.API_BASE_URL || 'https://your-backend.vercel.app/api',
   },
 
   presets: [

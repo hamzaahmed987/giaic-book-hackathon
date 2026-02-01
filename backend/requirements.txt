@@ -17,9 +17,6 @@ openai>=1.12.0
 # OpenAI Agents SDK (for agent framework)
 openai-agents>=0.2.0
 
-# Cohere (for embeddings)
-cohere>=5.0.0
-
 # Authentication
 python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.4
@@ -38,6 +35,9 @@ redis>=5.0.0
 # Utilities
 python-dotenv>=1.0.0
 tenacity>=8.2.0
+
+# Production
+gunicorn>=21.2.0
 
 # Development
 pytest>=7.4.0
