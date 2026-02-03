@@ -1,0 +1,6 @@
+cohere
+fastapi
+uvicorn
+# add any other packages your app uses, e.g.
+pydantic
+requests
